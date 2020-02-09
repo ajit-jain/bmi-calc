@@ -7,12 +7,19 @@ import 'materialize-css/dist/css/materialize.min.css';
 const uuidv1 = require('uuid/v4');
 
 const App = () => {
+
   let initialState = () => JSON.parse(localStorage.getItem('data')) || [];
-  const [state, setState] = useState(initialState);
+
+  // For listing of the BMIs
+  const [state,setState] = useState(initialState);
+
+  // For bar charts
   const [data, setData] = useState({});
 
   const handleChange = val => {
     let heightInM = val.height / 100;
+
+    //BMI formula bmi = weight/ (hInM*hInM)
     val.bmi = (val.weight / (heightInM * heightInM)).toFixed(2);
     val.id = uuidv1();
     let newVal = [...state, val];
@@ -31,6 +38,8 @@ const App = () => {
   const handleUndo = () => {
     setState(JSON.parse(localStorage.getItem('lastState')));
   };
+
+
   useEffect(() => {
     localStorage.setItem('data', JSON.stringify(state));
     const date = state.map(obj => obj.date);
@@ -52,6 +61,8 @@ const App = () => {
             <div className='row center'>
               <h4 className='white-text'>7 Day Data</h4>
             </div>
+
+
             <div className='data-container row'>
               {state.length > 0 ? (
                 <>
@@ -72,6 +83,8 @@ const App = () => {
               )}
             </div>
           </div>
+
+          
           {localStorage.getItem('lastState') !== null ? (
             <div className='center'>
               <button className='calculate-btn' onClick={handleUndo}>
